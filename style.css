@@ -1,0 +1,35 @@
+body {
+  font-family: Arial, sans-serif;
+  padding: 30px;
+}
+
+input, button {
+  padding: 10px;
+  margin: 10px 0;
+  width: 250px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  margin: 10px 0;
+  color: #0066cc;
+  cursor: pointer;
+}
+
+li:hover {
+  text-decoration: underline;
+}
+
+table {
+  border-collapse: collapse;
+  width: 80%;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
