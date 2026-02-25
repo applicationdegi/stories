@@ -1,42 +1,73 @@
 <!DOCTYPE html>
-<html lang="ur" dir="rtl">
+<html lang="ur">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اردو رومانٹک کہانیاں</title>
+    <title>اردو رومانوی کہانیاں</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Noto Naskh Arabic', serif;
+            direction: rtl;
+            background-color: #f4f4f4;
             margin: 0;
             padding: 20px;
-            background-color: #f9f9f9;
+        }
+        h1, h2 {
+            color: #333;
         }
         .story {
-            background: #fff;
-            border-radius: 5px;
+            background: white;
             padding: 15px;
             margin: 10px 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         @media (max-width: 600px) {
             body {
-                padding: 10px;
-            }
-            .story {
                 padding: 10px;
             }
         }
     </style>
 </head>
 <body>
-    <h1>اردو رومانٹک کہانیاں</h1>
-    <div class="story">
-        <h2>پہلی کہانی</h2>
-        <p>یہ ایک پیاری کہانی ہے جو محبت کے بارے میں ہے...</p>
+    <h1>اردو رومانوی کہانیاں</h1>
+    <div id="stories">
+        <div class="story">
+            <h2>کہانی 1</h2>
+            <p>کہانی 1 کا مواد یہاں شامل کریں۔</p>
+        </div>
+        <div class="story">
+            <h2>کہانی 2</h2>
+            <p>کہانی 2 کا مواد یہاں شامل کریں۔</p>
+        </div>
+        <div class="story">
+            <h2>کہانی 3</h2>
+            <p>کہانی 3 کا مواد یہاں شامل کریں۔</p>
+        </div>
+        <div class="story">
+            <h2>کہانی 4</h2>
+            <p>کہانی 4 کا مواد یہاں شامل کریں۔</p>
+        </div>
+        <div class="story">
+            <h2>کہانی 5</h2>
+            <p>کہانی 5 کا مواد یہاں شامل کریں۔</p>
+        </div>
+        <div class="story">
+            <h2>کہانی 6</h2>
+            <p>کہانی 6 کا مواد یہاں شامل کریں۔</p>
+        </div>
     </div>
-    <div class="story">
-        <h2>دوسری کہانی</h2>
-        <p>اس کہانی میں ایک نوجوان کی محبت کا سفر بیان کیا گیا ہے...</p>
-    </div>
+    <script>
+        // Local Storage Tracking
+        const storyViews = JSON.parse(localStorage.getItem('storyViews')) || {};
+        const stories = document.querySelectorAll('.story');
+        stories.forEach((story, index) => {
+            story.addEventListener('click', () => {
+                storyViews[`story${index + 1}`] = (storyViews[`story${index + 1}`] || 0) + 1;
+                localStorage.setItem('storyViews', JSON.stringify(storyViews));
+                alert(`آپ نے کہانی ${index + 1} کو ${storyViews[`story${index + 1}`]} بار دیکھا ہے`);
+            });
+        });
+    </script>
 </body>
 </html>
