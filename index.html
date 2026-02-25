@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stories Reader</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        .story {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #fafafa;
+        }
+        @media (max-width: 600px) {
+            .story {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Stories Reader</h1>
+        <div class="story" id="story1">
+            <h2>Story Title 1</h2>
+            <p>This is the first story.</p>
+            <button onclick="saveProgress('story1')">Mark as Read</button>
+        </div>
+        <div class="story" id="story2">
+            <h2>Story Title 2</h2>
+            <p>This is the second story.</p>
+            <button onclick="saveProgress('story2')">Mark as Read</button>
+        </div>
+    </div>
+    <script>
+        function saveProgress(storyId) {
+            localStorage.setItem(storyId, 'read');
+            alert('Progress saved for ' + storyId);
+        }
+
+        window.onload = function() {
+            document.querySelectorAll('.story').forEach(function(story) {
+                const storyId = story.id;
+                if (localStorage.getItem(storyId) === 'read') {
+                    story.style.backgroundColor = '#d1ffd1'; // Change color for read stories
+                }
+            });
+        };
+    </script>
+</body>
+</html>
