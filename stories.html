@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Stories</title>
+  <title>Story</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <h2>Select a Story</h2>
+<h2 id="storyTitle"></h2>
 
-  <ul>
-    <li onclick="trackStory('Secret Feelings')">Secret Feelings</li>
-    <li onclick="trackStory('Silent Nights')">Silent Nights</li>
-    <li onclick="trackStory('Unspoken Words')">Unspoken Words</li>
-    <li onclick="trackStory('Hidden Emotions')">Hidden Emotions</li>
-  </ul>
+<div id="storyContent">
+  <p>
+    Yeh kahani emotions aur feelings ke around ghoomti hai...
+    (Long story text here so scrolling happens)
+  </p>
+  <p>Scroll karte rahiye...</p>
+  <p style="margin-bottom:800px">End tak padhiye...</p>
+</div>
 
-  <br>
-  <a href="activity.html">View User Activity</a>
+<button onclick="nextStory()">Next Page</button>
 
-  <script src="app.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
