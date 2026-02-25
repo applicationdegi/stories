@@ -1,12 +1,6 @@
 body {
-  font-family: Arial, sans-serif;
-  padding: 30px;
-}
-
-input, button {
-  padding: 10px;
-  margin: 10px 0;
-  width: 250px;
+  font-family: Arial;
+  padding: 25px;
 }
 
 ul {
@@ -16,7 +10,7 @@ ul {
 
 li {
   margin: 10px 0;
-  color: #0066cc;
+  color: blue;
   cursor: pointer;
 }
 
@@ -24,9 +18,14 @@ li:hover {
   text-decoration: underline;
 }
 
+button {
+  padding: 10px 20px;
+  margin-top: 20px;
+}
+
 table {
   border-collapse: collapse;
-  width: 80%;
+  width: 100%;
 }
 
 th, td {
