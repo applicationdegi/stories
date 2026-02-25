@@ -1,61 +1,47 @@
-// Stories Reader Application
-// Local Storage Management for User Activity
+function saveLog(action, story = "", details = "") {
+  let logs = JSON.parse(localStorage.getItem("activityLogs")) || [];
 
-class StoriesApp {
-    constructor() {
-        this.storageKey = 'storiesReaderData';
-        this.initializeStorage();
-    }
-
-    // Initialize local storage
-    initializeStorage() {
-        if (!localStorage.getItem(this.storageKey)) {
-            localStorage.setItem(this.storageKey, JSON.stringify({
-                completedStories: [],
-                readingProgress: {},
-                totalTimeSpent: 0,
-                lastVisit: new Date().toISOString(),
-                userActivity: []
-            }));
-        }
-    }
-
-    // Get all stored data
-    getStorageData() {
-        return JSON.parse(localStorage.getItem(this.storageKey));
-function login() {
-  const email = document.getElementById("email").value;
-
-  if (!email) {
-    alert("Email required");
-    return;
-  }
-
-  const user = {
-    email: email,
-    loginTime: new Date().toISOString()
-  };
-
-  localStorage.setItem("user", JSON.stringify(user));
-  window.location.href = "stories.html";
-}
-
-// Track topic click
-function trackStory(topic) {
-  const user = JSON.parse(localStorage.getItem("user"));
-  if (!user) {
-    window.location.href = "index.html";
-    return;
-  }
-
-  let activity = JSON.parse(localStorage.getItem("activity")) || [];
-
-  activity.push({
-    email: user.email,
-    topic: topic,
+  logs.push({
+    action,
+    story,
+    details,
     time: new Date().toLocaleString()
   });
 
-  localStorage.setItem("activity", JSON.stringify(activity));
-  alert("Activity recorded");
+  localStorage.setItem("activityLogs", JSON.stringify(logs));
+}
+
+// Open story
+function openStory(storyName) {
+  localStorage.setItem("currentStory", storyName);
+  saveLog("Story Opened", storyName);
+  window.location.href = "story.html";
+}
+
+// Load story page
+if (window.location.pathname.includes("story.html")) {
+  const story = localStorage.getItem("currentStory");
+  document.getElementById("storyTitle").innerText = story;
+
+  saveLog("Story Page Viewed", story);
+
+  // Scroll tracking
+  let maxScroll = 0;
+  window.addEventListener("scroll", () => {
+    const scrollPercent = Math.round(
+      (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100
+    );
+
+    if (scrollPercent > maxScroll) {
+      maxScroll = scrollPercent;
+      saveLog("Scroll", story, scrollPercent + "%");
+    }
+  });
+}
+
+// Next page button
+function nextStory() {
+  const story = localStorage.getItem("currentStory");
+  saveLog("Next Button Clicked", story);
+  alert("Next story loading...");
 }
