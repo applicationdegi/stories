@@ -65,7 +65,7 @@
             story.addEventListener('click', () => {
                 storyViews[`story${index + 1}`] = (storyViews[`story${index + 1}`] || 0) + 1;
                 localStorage.setItem('storyViews', JSON.stringify(storyViews));
-                alert(`آپ نے کہانی ${index + 1} کو ${storyViews[`story${index + 1}`]} بار دیکھا ہے`);
+                //alert(`آپ نے کہانی ${index + 1} کو ${storyViews[`story${index + 1}`]} بار دیکھا ہے`);
             });
         });
     </script>
