@@ -1,38 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>User Activity</title>
+  <title>Activity Logs</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <h2>User Activity Log</h2>
+<h2>User Activity Logs</h2>
 
-  <table>
-    <thead>
+<table>
+  <thead>
+    <tr>
+      <th>Action</th>
+      <th>Story</th>
+      <th>Time</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody id="logs"></tbody>
+</table>
+
+<script>
+  const logs = JSON.parse(localStorage.getItem("activityLogs")) || [];
+  const table = document.getElementById("logs");
+
+  logs.forEach(log => {
+    table.innerHTML += `
       <tr>
-        <th>Email</th>
-        <th>Topic</th>
-        <th>Time</th>
+        <td>${log.action}</td>
+        <td>${log.story}</td>
+        <td>${log.time}</td>
+        <td>${log.details || "-"}</td>
       </tr>
-    </thead>
-    <tbody id="data"></tbody>
-  </table>
-
-  <script>
-    const activity = JSON.parse(localStorage.getItem("activity")) || [];
-    const table = document.getElementById("data");
-
-    activity.forEach(item => {
-      table.innerHTML += `
-        <tr>
-          <td>${item.email}</td>
-          <td>${item.topic}</td>
-          <td>${item.time}</td>
-        </tr>
-      `;
-    });
-  </script>
+    `;
+  });
+</script>
 
 </body>
 </html>
