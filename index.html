@@ -3,71 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Stories Reader</title>
+    <title>Stories Reader</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-        .header { background: #333; color: #fff; padding: 10px; text-align: center; }
-        .story { display: none; padding: 20px; border: 1px solid #ccc; margin: 10px; } 
-        .active { display: block; }
-        .progress { width: 100%; background: #f3f3f3; }
-        .progress-bar { height: 20px; background: #4caf50; width: 0; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .story { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; }
+        @media (max-width: 600px) {
+            .container { padding: 10px; }
+        }
     </style>
 </head>
 <body>
-    <div class="header"><h1>Responsive Stories Reader</h1></div>
-    <div id="storiesContainer"></div>
-    <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+    <div class="container">
+        <h1>Stories Reader</h1>
+        <div id="stories"></div>
+        <button id="loadMore">Load More Stories</button>
+    </div>
     <script>
         const stories = [
-            { title: 'Story 1', content: 'This is the first story.' },
-            { title: 'Story 2', content: 'This is the second story.' },
-            { title: 'Story 3', content: 'This is the third story.' },
+            { title: 'Story 1', content: 'This is the content of story 1.' },
+            { title: 'Story 2', content: 'This is the content of story 2.' },
+            { title: 'Story 3', content: 'This is the content of story 3.' },
+            // Add more stories as needed
         ];
-
         let currentIndex = 0;
-        let readingProgress = localStorage.getItem('readingProgress') ? JSON.parse(localStorage.getItem('readingProgress')) : {};
+        const storiesContainer = document.getElementById('stories');
+        const loadMoreButton = document.getElementById('loadMore');
 
         function loadStories() {
-            const container = document.getElementById('storiesContainer');
-            stories.forEach((story, index) => {
-                const storyDiv = document.createElement('div');
-                storyDiv.className = 'story';
-                storyDiv.innerHTML = `<h2>${story.title}</h2><p>${story.content}</p>`;
-                if (readingProgress[index]) {
-                    storyDiv.style.display = 'block';
-                }
-                container.appendChild(storyDiv);
-            });
-            updateProgress();
-        }
-
-        function updateProgress() {
-            const progressBar = document.getElementById('progressBar');
-            const progress = (currentIndex / stories.length) * 100;
-            progressBar.style.width = progress + '%';
-        }
-
-        function logUserActivity() {
-            const activityLog = JSON.parse(localStorage.getItem('activityLog')) || [];
-            activityLog.push({ storyIndex: currentIndex, timestamp: new Date() });
-            localStorage.setItem('activityLog', JSON.stringify(activityLog));
-        }
-
-        function nextStory() {
-            if (currentIndex < stories.length) {
-                readingProgress[currentIndex] = true;
-                localStorage.setItem('readingProgress', JSON.stringify(readingProgress));
-                currentIndex++;
-                loadStories();
-                updateProgress();
-                logUserActivity();
+            for (let i = 0; i < 2 && currentIndex < stories.length; i++, currentIndex++) {
+                const story = document.createElement('div');
+                story.classList.add('story');
+                story.innerHTML = `<h2>${stories[currentIndex].title}</h2><p>${stories[currentIndex].content}</p>`;
+                storiesContainer.appendChild(story);
             }
+            if (currentIndex >= stories.length) {
+                loadMoreButton.style.display = 'none';
+            }
+            trackStoryView();
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            loadStories();
-            document.body.addEventListener('click', nextStory);
-        });
+        function trackStoryView() {
+            const viewedStories = JSON.parse(localStorage.getItem('viewedStories')) || [];
+            viewedStories.push(currentIndex);
+            localStorage.setItem('viewedStories', JSON.stringify(viewedStories));
+        }
+
+        loadMoreButton.addEventListener('click', loadStories);
+        loadStories();
     </script>
 </body>
 </html>
