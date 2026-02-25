@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User Activity</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h2>User Activity Log</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Topic</th>
+        <th>Time</th>
+      </tr>
+    </thead>
+    <tbody id="data"></tbody>
+  </table>
+
+  <script>
+    const activity = JSON.parse(localStorage.getItem("activity")) || [];
+    const table = document.getElementById("data");
+
+    activity.forEach(item => {
+      table.innerHTML += `
+        <tr>
+          <td>${item.email}</td>
+          <td>${item.topic}</td>
+          <td>${item.time}</td>
+        </tr>
+      `;
+    });
+  </script>
+
+</body>
+</html>
