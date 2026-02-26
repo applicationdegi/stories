@@ -24,6 +24,8 @@
 <script>
   const logs = JSON.parse(localStorage.getItem("activityLogs")) || [];
   const table = document.getElementById("logs");
+  // Sort logs by most recent time
+  logs.sort((a, b) => new Date(b.time) - new Date(a.time));
 
   logs.forEach(log => {
     const device = log.device
