@@ -43,5 +43,5 @@ if (window.location.pathname.includes("story.html")) {
 function nextStory() {
   const story = localStorage.getItem("currentStory");
   saveLog("Next Button Clicked", story);
-  alert("Next story loading...");
+ // alert("Next story loading...");
 }
