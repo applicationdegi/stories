@@ -15,6 +15,8 @@
       <th>Story</th>
       <th>Time</th>
       <th>Details</th>
+      <th>Device</th>
+      
     </tr>
   </thead>
   <tbody id="logs"></tbody>
@@ -31,6 +33,7 @@
         <td>${log.story}</td>
         <td>${log.time}</td>
         <td>${log.details || "-"}</td>
+         <td>${log.device || "-"}</td>
       </tr>
     `;
   });
