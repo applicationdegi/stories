@@ -8,7 +8,7 @@
 
 <h2>User Activity Logs</h2>
 
-<table>
+<table border="1" cellpadding="8">
   <thead>
     <tr>
       <th>Action</th>
@@ -16,7 +16,6 @@
       <th>Time</th>
       <th>Details</th>
       <th>Device</th>
-      
     </tr>
   </thead>
   <tbody id="logs"></tbody>
@@ -27,13 +26,22 @@
   const table = document.getElementById("logs");
 
   logs.forEach(log => {
+    const device = log.device
+      ? `
+        <strong>${log.device.deviceType}</strong><br>
+        ${log.device.browser}<br>
+        ${log.device.platform}<br>
+        ${log.device.screenResolution}
+      `
+      : "-";
+
     table.innerHTML += `
       <tr>
         <td>${log.action}</td>
-        <td>${log.story}</td>
+        <td>${log.story || "-"}</td>
         <td>${log.time}</td>
         <td>${log.details || "-"}</td>
-         <td>${log.device || "-"}</td>
+        <td>${device}</td>
       </tr>
     `;
   });
