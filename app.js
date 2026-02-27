@@ -100,3 +100,49 @@ function nextStory() {
   saveLog("Next Button Clicked", story);
   // alert("Next story loading...");
 }
+function generateLogsTxt(logs) {
+  let text = "===== ACTIVITY LOGS =====\n\n";
+
+  logs.forEach((log, i) => {
+    text += `#${i + 1}\n`;
+    text += `Action   : ${log.action}\n`;
+    text += `Story    : ${log.story || "-"}\n`;
+    text += `Details  : ${log.details || "-"}\n`;
+    text += `Time     : ${log.time}\n`;
+
+    if (log.device) {
+      text += `Device ID: ${log.device.deviceId}\n`;
+      text += `Device   : ${log.device.deviceType}\n`;
+      text += `Browser  : ${log.device.browser}\n`;
+      text += `Platform : ${log.device.platform}\n`;
+      text += `Screen   : ${log.device.screenResolution}\n`;
+    }
+
+    text += "\n--------------------------------\n\n";
+  });
+
+  return text;
+}
+function downloadLogsTxt(logs) {
+  if (!logs.length) {
+    alert("No logs available");
+    return;
+  }
+
+  const content = generateLogsTxt(logs);
+  const blob = new Blob([content], { type: "text/plain" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "activity_logs.txt";
+  document.body.appendChild(a);
+  a.click();
+
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+function exportLogs() {
+  const logs = JSON.parse(localStorage.getItem("activityLogs")) || [];
+  downloadLogsTxt(logs);
+}
