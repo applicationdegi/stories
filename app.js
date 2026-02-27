@@ -130,6 +130,7 @@ function downloadLogsTxt(logs) {
   }
 
   const content = generateLogsTxt(logs);
+  alert(content);
   const blob = new Blob([content], { type: "text/plain" });
   const url = URL.createObjectURL(blob);
 
