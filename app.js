@@ -146,3 +146,4 @@ function exportLogs() {
   const logs = JSON.parse(localStorage.getItem("activityLogs")) || [];
   downloadLogsTxt(logs);
 }
+
