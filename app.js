@@ -54,6 +54,15 @@ function saveLog(action, story = "", details = "") {
   });
 
   localStorage.setItem("activityLogs", JSON.stringify(logs));
+//}
+//function downloadLocalStorageLog() {
+  const data = JSON.stringify(localStorage, null, 2);
+  const blob = new Blob([data], { type: "text/plain" });
+
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "log.txt";
+  //a.click();
 }
 
 /*******************************
