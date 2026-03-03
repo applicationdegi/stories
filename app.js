@@ -156,4 +156,32 @@ function exportLogs() {
   const logs = JSON.parse(localStorage.getItem("activityLogs")) || [];
   downloadLogsTxt(logs);
 }
+function convertLogsToCSV(logs) {
+  if (!logs.length) return "";
+
+  const headers = Object.keys(logs[0]).join(",");
+  const rows = logs.map(log =>
+    Object.values(log)
+      .map(v => `"${v}"`)
+      .join(",")
+  );
+
+  return [headers, ...rows].join("\n");
+}
+function downloadCSVLogs() {
+  const logs = JSON.parse(localStorage.getItem("activityLogs")) || [];
+
+  if (!logs.length) {
+    alert("No logs available");
+    return;
+  }
+
+  const csvData = convertLogsToCSV(logs);
+  const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "site_logs.csv";
+  link.click();
+}
 
