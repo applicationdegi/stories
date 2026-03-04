@@ -1,6 +1,6 @@
-/*********************************
+/*******************************
  * DEVICE IDENTIFICATION
- *********************************/
+ *******************************/
 function getDeviceId() {
   let deviceId = localStorage.getItem("deviceId");
   if (!deviceId) {
@@ -39,9 +39,9 @@ function getDeviceDetails() {
   };
 }
 
-/*********************************
+/*******************************
  * ACTIVITY LOGGING
- *********************************/
+ *******************************/
 function saveLog(action, story = "", details = "") {
   const logs = JSON.parse(localStorage.getItem("activityLogs")) || [];
 
@@ -54,50 +54,61 @@ function saveLog(action, story = "", details = "") {
   });
 
   localStorage.setItem("activityLogs", JSON.stringify(logs));
+//}
+//function downloadLocalStorageLog() {
+  const data = JSON.stringify(localStorage, null, 2);
+  const blob = new Blob([data], { type: "text/plain" });
+
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "log.txt";
+  //a.click();
 }
 
-/*********************************
- * STORY NAVIGATION
- *********************************/
+/*******************************
+ * OPEN STORY
+ *******************************/
 function openStory(storyName) {
   localStorage.setItem("currentStory", storyName);
   saveLog("Story Opened", storyName);
   window.location.href = "story.html";
 }
 
-function nextStory() {
-  const story = localStorage.getItem("currentStory");
-  saveLog("Next Button Clicked", story);
-}
-
-/*********************************
- * STORY PAGE TRACKING
- *********************************/
+/*******************************
+ * STORY PAGE LOGIC
+ *******************************/
 if (window.location.pathname.includes("story.html")) {
   const story = localStorage.getItem("currentStory");
 
-  if (story && document.getElementById("storyTitle")) {
+  if (story) {
     document.getElementById("storyTitle").innerText = story;
     saveLog("Story Page Viewed", story);
   }
 
+  // Scroll tracking
   let maxScroll = 0;
 
   window.addEventListener("scroll", () => {
     const scrollHeight = document.body.scrollHeight - window.innerHeight;
     if (scrollHeight <= 0) return;
 
-    const percent = Math.round((window.scrollY / scrollHeight) * 100);
-    if (percent > maxScroll) {
-      maxScroll = percent;
-      saveLog("Scroll", story, percent + "%");
+    const scrollPercent = Math.round((window.scrollY / scrollHeight) * 100);
+
+    if (scrollPercent > maxScroll) {
+      maxScroll = scrollPercent;
+      saveLog("Scroll", story, scrollPercent + "%");
     }
   });
 }
 
-/*********************************
- * TXT EXPORT
- *********************************/
+/*******************************
+ * NEXT STORY BUTTON
+ *******************************/
+function nextStory() {
+  const story = localStorage.getItem("currentStory");
+  saveLog("Next Button Clicked", story);
+  // alert("Next story loading...");
+}
 function generateLogsTxt(logs) {
   let text = "===== ACTIVITY LOGS =====\n\n";
 
@@ -113,81 +124,63 @@ function generateLogsTxt(logs) {
       text += `Device   : ${log.device.deviceType}\n`;
       text += `Browser  : ${log.device.browser}\n`;
       text += `Platform : ${log.device.platform}\n`;
-      text += `Language : ${log.device.language}\n`;
       text += `Screen   : ${log.device.screenResolution}\n`;
-      text += `Touch    : ${log.device.touchSupport}\n`;
     }
 
-    text += "\n------------------------------\n\n";
+    text += "\n--------------------------------\n\n";
   });
 
   return text;
 }
+function downloadLogsTxt(logs) {
+  if (!logs.length) {
+    alert("No logs available");
+    return;
+  }
 
-function downloadLogsTxt() {
-  const logs = JSON.parse(localStorage.getItem("activityLogs")) || [];
-  if (!logs.length) return alert("No logs available");
+  const content = generateLogsTxt(logs);
+  alert(content);
+  const blob = new Blob([content], { type: "text/plain" });
+  const url = URL.createObjectURL(blob);
 
-  const blob = new Blob([generateLogsTxt(logs)], { type: "text/plain" });
   const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
+  a.href = url;
   a.download = "activity_logs.txt";
+  document.body.appendChild(a);
   a.click();
-}
 
-/*********************************
- * CSV EXPORT (FIXED & FLAT)
- *********************************/
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+function exportLogs() {
+  const logs = JSON.parse(localStorage.getItem("activityLogs")) || [];
+  downloadLogsTxt(logs);
+}
 function convertLogsToCSV(logs) {
-  const headers = [
-    "action",
-    "story",
-    "details",
-    "time",
-    "deviceId",
-    "deviceType",
-    "browser",
-    "platform",
-    "language",
-    "screenResolution",
-    "touchSupport"
-  ];
+  if (!logs.length) return "";
 
-  const rows = logs.map(log => [
-    log.action,
-    log.story,
-    log.details,
-    log.time,
-    log.device?.deviceId,
-    log.device?.deviceType,
-    log.device?.browser,
-    log.device?.platform,
-    log.device?.language,
-    log.device?.screenResolution,
-    log.device?.touchSupport
-  ].map(v => `"${String(v || "").replace(/"/g, '""')}"`).join(","));
+  const headers = Object.keys(logs[0]).join(",");
+  const rows = logs.map(log =>
+    Object.values(log)
+      .map(v => `"${v}"`)
+      .join(",")
+  );
 
-  return [headers.join(","), ...rows].join("\n");
+  return [headers, ...rows].join("\n");
 }
-
 function downloadCSVLogs() {
   const logs = JSON.parse(localStorage.getItem("activityLogs")) || [];
-  if (!logs.length) return alert("No logs available");
 
-  const blob = new Blob([convertLogsToCSV(logs)], {
-    type: "text/csv;charset=utf-8;"
-  });
+  if (!logs.length) {
+    alert("No logs available");
+    return;
+  }
 
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "site_logs.csv";
-  a.click();
-}
+  const csvData = convertLogsToCSV(logs);
+  const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
 
-/*********************************
- * OPTIONAL: CLEAR LOGS
- *********************************/
-function clearLogs() {
-  localStorage.removeItem("activityLogs");
-  alert("Logs cleared");
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "site_logs.csv";
+  link.click();
 }
